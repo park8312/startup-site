@@ -17,12 +17,12 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function SiteLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="ko">
       <body className="min-h-dvh bg-background text-foreground antialiased">
         <Header />
-        <main>{children}</main>
+        <main className="relative z-0">{children}</main>
         <Footer />
       </body>
     </html>
