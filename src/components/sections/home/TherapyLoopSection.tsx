@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { motion, useScroll, useSpring, useMotionValueEvent } from "framer-motion";
 import FadeIn from "@/components/motion/FadeIn";
 
 type Step = {
@@ -45,7 +46,10 @@ export default function TherapyLoopSection() {
 
       // 섹션이 화면에 들어왔을 때 0~1로 정규화
       const progress = clamp01((vh * 0.75 - rect.top) / (rect.height * 0.75));
-      const idx = Math.min(STEPS.length - 1, Math.max(0, Math.floor(progress * STEPS.length)));
+      const idx = Math.min(
+        STEPS.length - 1,
+        Math.max(0, Math.round(progress * (STEPS.length - 1)))
+      );
       setActive(idx);
     };
 
@@ -54,16 +58,43 @@ export default function TherapyLoopSection() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start 0.85", "end 0.15"],
+  });
+
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 120,
+    damping: 22,
+    mass: 0.2,
+  });
+
+  useMotionValueEvent(smoothProgress, "change", (p) => {
+    const n = STEPS.length;
+
+    // 앞 20%, 뒤 20%는 완충 구간으로 비워두고, 가운데 60%만 단계 매핑
+    const startPad = 0.20;
+    const endPad = 0.20;
+
+    const t = (p - startPad) / (1 - startPad - endPad); // normalize
+    const clamped = Math.min(1, Math.max(0, t));
+
+    const idx = Math.min(n - 1, Math.max(0, Math.floor(clamped * n)));
+    setActive(idx);
+  });
+
+
   return (
-    <section ref={ref} className="relative bg-background">
+    <section ref={ref} className="relative overflow-hidden bg-gradient-to-b from-zinc-950 via-zinc-950 to-background">
       {/* background accents */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden" aria-hidden="true">
         <div className="absolute left-1/2 top-[-160px] h-[420px] w-[680px] -translate-x-1/2 rounded-full bg-indigo-500/10 blur-3xl" />
         <div className="absolute right-[-180px] top-[140px] h-[420px] w-[420px] rounded-full bg-emerald-400/10 blur-3xl" />
         <div className="absolute inset-0 opacity-[0.35] [background-image:radial-gradient(rgba(255,255,255,0.06)_1px,transparent_1px)] [background-size:24px_24px]" />
       </div>
 
-      <div className="relative mx-auto max-w-6xl px-6 py-20 sm:py-28">
+
+      <div className="relative z-10 mx-auto max-w-6xl px-6 py-20 sm:py-28">
         <FadeIn delay={0.02}>
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80 backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />

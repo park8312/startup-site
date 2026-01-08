@@ -3,16 +3,16 @@ import FadeIn from "@/components/motion/FadeIn";
 
 const items = [
   {
-    title: "움직임 인식",
-    desc: "아이의 경추 움직임을 정량화하여 상태 변화를 더 명확하게 봅니다.",
+    title: "Data",
+    desc: "물리치료, 재활운동 비디오, 의학적 근거를 포함하는 영상, 3D 데이터 처리와 Calibration",
   },
   {
-    title: "개인화 알고리즘",
-    desc: "아이별 패턴에 맞춘 재활 콘텐츠/루틴을 설계합니다.",
+    title: "AI",
+    desc: "3D 신체/행동 추론 AI모델, 단안카메라에서의 3D 이미지 추론",
   },
   {
-    title: "치료 피드백",
-    desc: "순응도·진행 상황을 데이터로 제공해 치료를 이어가도록 돕습니다.",
+    title: "Business",
+    desc: "재활운동의 개인화된 HomeCare, 영유아를 위한 서비스 개발",
   },
 ];
 
@@ -24,10 +24,10 @@ export default function CoreTech() {
           <FadeIn>
             <div>
               <h2 className="text-2xl font-semibold tracking-tight md:text-3xl">
-                기술을 “설명”하기보다, “이해”되게
+                우리의 Key Tech, Key Value
               </h2>
               <p className="mt-3 max-w-2xl text-foreground/70">
-                복잡한 AI를 한 줄로 요약하고, 시각적으로 전달합니다.
+                우리는 좋은 데이터로, 인공지능을 통해, 사람을 위한 비즈니스를 합니다.
               </p>
             </div>
           </FadeIn>
