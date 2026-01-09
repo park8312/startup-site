@@ -3,9 +3,29 @@
 import Link from "next/link";
 import FadeIn from "@/components/motion/FadeIn";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
+import TherapyAnalyticsCard from "@/components/sections/home/TherapyAnalyticsCard";
 
+type Snap = {
+  isLive: boolean;
+  caption: string;
+  biasPct: number;
+  adherencePct: number;
+  sessionsDone: number;
+  series: { t: number; v: number }[];
+};
 
 export default function Hero() {
+  const [snap, setSnap] = useState<Snap | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      const resp = await fetch("/api/therapy-analytics/latest", { cache: "no-store" });
+      const j = await resp.json().catch(() => ({}));
+      if (j?.ok) setSnap(j.snapshot);
+    })();
+  }, []);
+
   return (
     <section className="relative overflow-hidden">
       {/* background */}
@@ -105,7 +125,10 @@ export default function Hero() {
             </div>
 
             <div className="space-y-4">
-              <div className="h-28 rounded-xl bg-gradient-to-r from-indigo-500/20 via-sky-400/20 to-emerald-400/20" />
+              <TherapyAnalyticsCard 
+                data={snap?.series}
+                caption={snap?.caption ?? "Preview (mock)"}
+              />
               <div className="grid grid-cols-3 gap-3">
                 <Stat label="좌·우 편향" value="↓ 12%" />
                 <Stat label="순응도" value="94%" />
