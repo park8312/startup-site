@@ -48,7 +48,6 @@ export default function TherapyAnalyticsAdminPage() {
       const resp = await fetch("/api/admin/therapy-analytics");
       const j = await resp.json();
       setSnapshot(j.snapshot);
-      setSeriesText(JSON.stringify(j.snapshot.series ?? [], null, 2));
       setLoading(false);
     })();
   }, []);
