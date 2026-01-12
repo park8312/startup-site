@@ -5,6 +5,8 @@ import FadeIn from "@/components/motion/FadeIn";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import TherapyAnalyticsCard from "@/components/sections/home/TherapyAnalyticsCard";
+import type { TherapyAnalyticsSnapshot } from "@/lib/admin/therapyStore";
+
 
 type Snap = {
   isLive: boolean;
@@ -16,13 +18,19 @@ type Snap = {
 };
 
 export default function Hero() {
-  const [snap, setSnap] = useState<Snap | null>(null);
+  const [snapshot, setSnapshot] = useState<TherapyAnalyticsSnapshot | null>(null);
 
   useEffect(() => {
     (async () => {
-      const resp = await fetch("/api/therapy-analytics/latest", { cache: "no-store" });
-      const j = await resp.json().catch(() => ({}));
-      if (j?.ok) setSnap(j.snapshot);
+      try {
+        const resp = await fetch("/api/therapy-analytics/latest", {
+          cache: "no-store",
+        });
+        const j = await resp.json();
+        setSnapshot(j.snapshot ?? null);
+      } catch {
+        setSnapshot(null);
+      }
     })();
   }, []);
 
@@ -125,14 +133,18 @@ export default function Hero() {
             </div>
 
             <div className="space-y-4">
-              <TherapyAnalyticsCard 
-                data={snap?.series}
-                caption={snap?.caption ?? "Preview (mock)"}
-              />
+              {snapshot && (
+                <TherapyAnalyticsCard
+                  xLabels={snapshot.xLabels}
+                  dt={snapshot.dt}
+                  se={snapshot.se}
+                />
+              )}
+
               <div className="grid grid-cols-3 gap-3">
-                <Stat label="좌·우 편향" value="↓ 12%" />
-                <Stat label="순응도" value="94%" />
-                <Stat label="세션 완료" value="28회" />
+                <Stat label="좌·우 편향" value={`↓ ${snapshot?.biasPct ?? 0}%`} />
+                <Stat label="순응도" value={`${snapshot?.adherencePct ?? 0}%`} />
+                <Stat label="세션 완료" value={`${snapshot?.sessionsDone ?? 0}회`} />
               </div>
             </div>
           </div>

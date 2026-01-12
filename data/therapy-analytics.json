@@ -1,10 +1,28 @@
 {
-  "updatedAt": "2026-01-09T08:27:29.899Z",
+  "updatedAt": "2026-01-09T17:24:44.811Z",
   "isLive": true,
   "caption": "Phase 2 Clinical Trial(END)",
-  "biasPct": 12,
+  "biasPct": 30,
   "adherencePct": 94,
   "sessionsDone": 2876,
+  "xLabels": [
+    "T0 (baseline)",
+    "T1 (4 weeks)",
+    "T2 (8 weeks)",
+    "T3 (12 weeks)"
+  ],
+  "dt": [
+    12.5,
+    14.5,
+    15.5,
+    16.25
+  ],
+  "se": [
+    14.5,
+    15,
+    16,
+    16
+  ],
   "series": [
     {
       "t": 0,

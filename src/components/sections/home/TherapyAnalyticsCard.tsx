@@ -5,6 +5,13 @@ import { motion } from "framer-motion";
 
 type Point = { t: number; v: number };
 
+type Props = {
+  xLabels: string[];
+  dt: number[];
+  se: number[];
+  yLabel?: string; // "Torticollis overall score"
+};
+
 function makeMockSeries(n = 42): Point[] {
   // 완만하게 좋아지는 형태(초반 변동, 후반 안정)
   const out: Point[] = [];
@@ -56,111 +63,153 @@ function toAreaPath(linePath: string, w: number, h: number, pad = 8) {
   return "";
 }
 
-export default function TherapyAnalyticsPanel({
-  height = 108,
-  className = "",
-  data,
-  caption = "Preview (mock)",
-}: {
-  height?: number;
-  className?: string;
-  data?: Point[];
-  caption?: string;
-}) {
-  const W = 460; // viewBox 기준 폭(반응형으로 늘어남)
-  const H = height;
+export default function TherapyAnalyticsCard({
+  xLabels,
+  dt,
+  se,
+  yLabel = "Torticollis overall score",
+}: Props) {
+  // --- chart sizing ---
+  const W = 560;
+  const H = 260;
+  const pad = { l: 56, r: 16, t: 16, b: 56 };
+  const innerW = W - pad.l - pad.r;
+  const innerH = H - pad.t - pad.b;
 
-  const series = useMemo(() => data ?? makeMockSeries(), [data]);
-  const line = useMemo(() => toPath(series, W, H, 10), [series, W, H]);
+  const n = Math.max(xLabels.length, dt.length, se.length);
+
+  const all = [...dt, ...se].filter((v) => Number.isFinite(v));
+  const minY0 = Math.min(...all);
+  const maxY0 = Math.max(...all);
+
+  // y축 여유 조금
+  const yPad = Math.max(0.5, (maxY0 - minY0) * 0.12);
+  const minY = Math.floor((minY0 - yPad) * 2) / 2;
+  const maxY = Math.ceil((maxY0 + yPad) * 2) / 2;
+
+  const xAt = (i: number) =>
+    pad.l + (n <= 1 ? innerW / 2 : (innerW * i) / (n - 1));
+  const yAt = (v: number) =>
+    pad.t + (1 - (v - minY) / (maxY - minY || 1)) * innerH;
+
+  const toPath = (arr: number[]) =>
+    arr
+      .slice(0, n)
+      .map((v, i) => `${i === 0 ? "M" : "L"} ${xAt(i).toFixed(2)} ${yAt(v).toFixed(2)}`)
+      .join(" ");
+
+  const dtPath = toPath(dt);
+  const sePath = toPath(se);
+
+  // y ticks (5줄 정도)
+  const ticks = 5;
+  const tickVals = Array.from({ length: ticks + 1 }, (_, i) => {
+    const t = i / ticks;
+    return minY + (maxY - minY) * (1 - t);
+  });
 
   return (
-    <div
-      className={[
-        "relative overflow-hidden rounded-2xl",
-        "bg-gradient-to-br from-white/8 to-white/4",
-        "border border-white/10",
-        className,
-      ].join(" ")}
-    >
-      {/* subtle noise/glow */}
-      <div className="pointer-events-none absolute inset-0 opacity-70">
-        <div className="absolute -left-24 -top-24 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
-        <div className="absolute -right-20 -bottom-20 h-56 w-56 rounded-full bg-white/10 blur-3xl" />
-      </div>
+    <div className="w-full">
+      <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto">
+        {/* background */}
+        <rect x="0" y="0" width={W} height={H} rx="14" fill="rgba(0,0,0,0.18)" />
 
-      {/* animated scan line */}
-      <motion.div
-        className="pointer-events-none absolute inset-x-0 h-10 bg-gradient-to-b from-white/0 via-white/10 to-white/0 blur-md"
-        initial={{ y: -40, opacity: 0.0 }}
-        animate={{ y: H + 40, opacity: [0.0, 0.45, 0.0] }}
-        transition={{ duration: 2.8, repeat: Infinity, ease: "easeInOut" }}
-      />
+        {/* grid + y ticks */}
+        {tickVals.map((v, idx) => {
+          const y = yAt(v);
+          return (
+            <g key={idx}>
+              <line
+                x1={pad.l}
+                x2={W - pad.r}
+                y1={y}
+                y2={y}
+                stroke="rgba(255,255,255,0.10)"
+                strokeWidth="1"
+              />
+              <text
+                x={pad.l - 10}
+                y={y + 4}
+                textAnchor="end"
+                fontSize="10"
+                fill="rgba(255,255,255,0.55)"
+              >
+                {v.toFixed(0)}
+              </text>
+            </g>
+          );
+        })}
 
-      <div className="relative p-3">
-        <div className="mb-2 flex items-center justify-between">
-          <div className="text-[11px] text-white/70">{caption}</div>
-          <div className="text-[11px] text-white/60">Session trend</div>
-        </div>
+        {/* axes */}
+        <line
+          x1={pad.l}
+          x2={pad.l}
+          y1={pad.t}
+          y2={H - pad.b}
+          stroke="rgba(255,255,255,0.18)"
+        />
+        <line
+          x1={pad.l}
+          x2={W - pad.r}
+          y1={H - pad.b}
+          y2={H - pad.b}
+          stroke="rgba(255,255,255,0.18)"
+        />
 
-        <svg
-          viewBox={`0 0 ${W} ${H}`}
-          className="h-[108px] w-full"
-          aria-label="Therapy analytics preview chart"
-          role="img"
+        {/* y label (rotate) */}
+        <text
+          x={16}
+          y={H / 2}
+          transform={`rotate(-90 16 ${H / 2})`}
+          fontSize="11"
+          fill="rgba(255,255,255,0.60)"
         >
-          <defs>
-            <linearGradient id="ta_line" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stopColor="rgba(255,255,255,0.85)" />
-              <stop offset="100%" stopColor="rgba(255,255,255,0.35)" />
-            </linearGradient>
+          {yLabel}
+        </text>
 
-            <linearGradient id="ta_fill" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="rgba(255,255,255,0.18)" />
-              <stop offset="100%" stopColor="rgba(255,255,255,0.00)" />
-            </linearGradient>
+        {/* x labels */}
+        {xLabels.slice(0, n).map((lab, i) => (
+          <text
+            key={i}
+            x={xAt(i)}
+            y={H - 24}
+            textAnchor="middle"
+            fontSize="10"
+            fill="rgba(255,255,255,0.65)"
+          >
+            {lab}
+          </text>
+        ))}
 
-            {/* line로 clip 만든 뒤 rect로 area 느낌 */}
-            <clipPath id="ta_clip">
-              <path d={line} />
-            </clipPath>
-          </defs>
+        {/* DT line */}
+        <path d={dtPath} fill="none" stroke="#ef4444" strokeWidth="3.5" strokeLinecap="round" />
+        {/* SE line */}
+        <path d={sePath} fill="none" stroke="#3b82f6" strokeWidth="3.5" strokeLinecap="round" />
 
-          {/* grid */}
-          {[0.2, 0.4, 0.6, 0.8].map((p, i) => (
-            <line
-              key={i}
-              x1="10"
-              x2={W - 10}
-              y1={H * p}
-              y2={H * p}
-              stroke="rgba(255,255,255,0.08)"
-              strokeWidth="1"
-            />
-          ))}
+        {/* points */}
+        {dt.slice(0, n).map((v, i) => (
+          <circle key={`dt-${i}`} cx={xAt(i)} cy={yAt(v)} r="4.5" fill="#ef4444" />
+        ))}
+        {se.slice(0, n).map((v, i) => (
+          <circle key={`se-${i}`} cx={xAt(i)} cy={yAt(v)} r="4.5" fill="#3b82f6" />
+        ))}
 
-          {/* area fill (under curve 느낌) */}
-          <path
-            d={`${line} L ${W - 10} ${H - 10} L 10 ${H - 10} Z`}
-            fill="url(#ta_fill)"
-            opacity="0.9"
-          />
-
-          {/* main line */}
-          <path d={line} fill="none" stroke="url(#ta_line)" strokeWidth="2.2" />
-
-          {/* moving dot */}
-          <motion.circle
-            r="4.3"
-            fill="rgba(255,255,255,0.85)"
-            initial={{ cx: 18, cy: H * 0.55, opacity: 0.6 }}
-            animate={{
-              cx: [18, W - 18],
-              opacity: [0.2, 0.75, 0.2],
-            }}
-            transition={{ duration: 3.2, repeat: Infinity, ease: "easeInOut" }}
-          />
-        </svg>
-      </div>
+        {/* legend */}
+        <g transform={`translate(${W / 2 - 90}, ${H - 10})`}>
+          <g>
+            <line x1="0" x2="24" y1="0" y2="0" stroke="#ef4444" strokeWidth="4" />
+            <text x="30" y="4" fontSize="10" fill="rgba(255,255,255,0.75)">
+              DT group(avg)
+            </text>
+          </g>
+          <g transform="translate(110, 0)">
+            <line x1="0" x2="24" y1="0" y2="0" stroke="#3b82f6" strokeWidth="4" />
+            <text x="30" y="4" fontSize="10" fill="rgba(255,255,255,0.75)">
+              SE group(avg)
+            </text>
+          </g>
+        </g>
+      </svg>
     </div>
   );
 }
