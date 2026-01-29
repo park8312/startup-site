@@ -65,7 +65,7 @@ export default function Hero() {
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(0,0,0,0.65)_100%)]" />
       </div>
 
-      <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 gap-12 px-6 pt-24 pb-16 sm:pt-32 sm:pb-24 lg:grid-cols-2 lg:items-center">
+      <div className="relative z-10 mx-auto grid w-full min-h-screen grid-cols-1 gap-8 px-6 pt-32 pb-24 sm:pt-48 sm:pb-32 lg:grid-cols-[1.5fr_0.8fr] lg:items-center">
         <div>
           <FadeIn delay={0.08}>
             <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80 backdrop-blur">
@@ -75,21 +75,22 @@ export default function Hero() {
           </FadeIn>
 
           <FadeIn delay={0.08}>
-            <h1 className="mt-6 max-w-3xl text-balance text-4xl font-semibold tracking-tight text-white sm:text-6xl">
+            <h1 className="mt-12 max-w-5xl text-balance text-4xl font-semibold tracking-tight leading-[1.4] text-white sm:text-6xl">
               아이의 움직임을 이해하는 AI,
-              <span className="text-white/80"> 치료 경험을 더 정확하게</span>
+              <br />
+              <span className="text-white/80">치료 경험을 더 정확하게</span>
             </h1>
           </FadeIn>
 
           <FadeIn delay={0.08}>
-            <p className="mt-6 max-w-2xl text-pretty text-base leading-relaxed text-white/70 sm:text-lg">
-              NEXTDOOR.AI는 소아사경 디지털 치료기기를 중심으로, 움직임 데이터를 정밀하게 분석하고
-              개인화된 재활 루틴을 설계합니다. 병원·연구기관과 함께 임상 근거를 쌓아갑니다.
+            <p className="mt-12 w-full text-pretty text-base leading-[2] text-white/70 sm:text-lg">
+              NextDoor Inc.는 소아사경 디지털 치료기기를 중심으로, 움직임 데이터를 정밀하게 분석하고 개인화된 재활 루틴을 설계합니다.<br />
+              병원·연구기관과 함께 임상 근거를 쌓아갑니다.
             </p>
           </FadeIn>
 
           <FadeIn delay={0.08}>
-            <div className="mt-8 flex flex-wrap items-center gap-4">
+            <div className="mt-16 flex flex-wrap items-center gap-4">
               {/* Primary CTA */}
               <a
                 href="/contact"
@@ -107,8 +108,7 @@ export default function Hero() {
               </a>
 
               <p className="ml-1 text-xs text-white/50">
-                ※ 의료 관련 표현/효과는 임상 및 인허가 진행 상황에 맞춰 정확히
-                표기됩니다.
+                ※ 임상 및 인허가 진행 상황에 맞춰 제품이 업데이트될 수 있습니다.
               </p>
             </div>
 
@@ -116,7 +116,7 @@ export default function Hero() {
 
           {/* stats / mini proof */}
           <FadeIn delay={0.08}>
-            <div className="mt-10 grid gap-3 sm:grid-cols-3">
+            <div className="mt-20 grid gap-3 sm:grid-cols-3">
               <MiniStat title="움직임 데이터" desc="정량화된 모션 지표로 상태 변화를 추적" />
               <MiniStat title="개인화 루틴" desc="아이별 패턴 기반 처방형 콘텐츠 설계" />
               <MiniStat title="치료 피드백" desc="순응도·진행을 데이터로 제공" />
@@ -126,7 +126,7 @@ export default function Hero() {
         <div className="relative hidden lg:block">
           <div className="relative rounded-3xl border border-white/10 bg-gradient-to-b from-white/15 to-white/5 p-6 backdrop-blur shadow-[0_20px_80px_rgba(0,0,0,0.4)]">
             <div className="mb-4 flex items-center justify-between">
-              <p className="text-xs font-medium text-white/70">Therapy Analytics</p>
+              <p className="text-xs font-medium text-white/70">{snapshot?.caption}</p>
               <span className="rounded-full bg-emerald-400/20 px-2 py-0.5 text-[10px] text-emerald-300">
                 LIVE
               </span>

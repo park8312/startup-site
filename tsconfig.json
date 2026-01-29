@@ -8,6 +8,7 @@
     ],
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
+    "baseUrl": ".",
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
@@ -36,7 +37,7 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-  ],
+, "src/app/(site)/evidence/page.000"  ],
   "exclude": [
     "node_modules"
   ]

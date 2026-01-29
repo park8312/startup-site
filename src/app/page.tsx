@@ -12,9 +12,7 @@ export default function Home() {
       <Hero />
       <CoreTech />
       <TherapyLoopSection />
-      <div className="bg-yellow-200 p-2 text-center">EVIDENCE HERE</div>
       <Evidence />
-      <div className="bg-yellow-200 p-2 text-center">EVIDENCE HERE</div>
       <CTA />
     </>
   );

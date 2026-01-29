@@ -1,0 +1,32 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  //url      = env("DATABASE_URL")
+}
+
+model StoryItem {
+  id          String   @id @default(cuid())
+  year        String
+  title       String
+  body        String
+  imageUrl    String?
+  videoUrl    String?
+  order       Int      @default(0)
+  isPublished Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([order])
+}
+
+model CompanyPageContent {
+  id        String   @id @default(cuid())
+  key       String   @unique // "company"
+  data      Json
+  status    String   @default("published") // draft/published
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

@@ -1,10 +1,28 @@
+import ProductHero from "@/components/product/ProductHero";
+import ProductProblem from "@/components/product/ProductProblem";
+import ProductSolution from "@/components/product/ProductSolution";
+import ProductFeatures from "@/components/product/ProductFeatures";
+import ProductScreens from "@/components/product/ProductScreens";
+import ProductHowItWorks from "@/components/product/ProductHowItWorks";
+import ProductDemo from "@/components/product/ProductDemo";
+import ProductCTA from "@/components/product/ProductCTA";
+
+export const metadata = {
+  title: "Product",
+  description: "ACESO product overview",
+};
+
 export default function ProductPage() {
   return (
-    <div className="mx-auto max-w-6xl px-6 py-20">
-      <h1 className="text-3xl font-semibold">제품</h1>
-      <p className="mt-4 text-foreground/70">
-        소아사경 디지털 치료기기 소개 페이지 (구현 예정)
-      </p>
-    </div>
+    <main className="min-h-dvh">
+      <ProductHero />
+      <ProductProblem />
+      <ProductSolution />
+      <ProductFeatures />
+      <ProductScreens />
+      <ProductHowItWorks />
+      <ProductDemo />
+      <ProductCTA />
+    </main>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 const NAV = [
@@ -27,19 +28,20 @@ export default function Header() {
         "fixed top-0 left-0 right-0 z-50 w-full",
         "transition-colors duration-300",
         scrolled
-          ? "bg-white/85 text-zinc-900 backdrop-blur border-b border-black/10"
-          : "bg-transparent text-white",
+          ? "bg-[hsl(var(--background))]/70 text-[hsl(var(--foreground))] backdrop-blur border-b border-[hsl(var(--border))]"
+          : "bg-transparent text-[hsl(var(--foreground))]",
       ].join(" ")}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6">
-        <Link
-          href="/"
-          className={[
-            "text-sm font-semibold tracking-wide",
-            scrolled ? "text-zinc-900" : "text-white",
-          ].join(" ")}
-        >
-          NEXTDOOR.AI
+      <div className="flex h-16 w-full items-center justify-between px-5 md:px-9">
+        <Link href="/" className="flex items-center">
+          <Image
+            src="/company/ND.png"
+            alt="NextDoor Inc."
+            width={190}
+            height={38}
+            className="h-9 w-auto"
+            priority
+          />
         </Link>
 
         <nav className="hidden items-center gap-7 md:flex">
@@ -49,7 +51,9 @@ export default function Header() {
               href={item.href}
               className={[
                 "text-sm transition",
-                scrolled ? "text-zinc-700 hover:text-zinc-900" : "text-white/70 hover:text-white",
+                scrolled
+                  ? "text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]"
+                  : "text-[hsl(var(--muted-foreground))] hover:text-[hsl(var(--foreground))]",
               ].join(" ")}
             >
               {item.label}
@@ -60,18 +64,13 @@ export default function Header() {
         <div className="flex items-center gap-3">
           <Link
             href="/contact"
-            className={[
-              "inline-flex h-9 items-center justify-center rounded-xl px-4 text-sm font-medium transition",
-              scrolled
-                ? "bg-zinc-900 text-white hover:bg-zinc-800"
-                : "bg-white/10 text-white backdrop-blur hover:bg-white/15 border border-white/15",
-            ].join(" ")}
+            className="rounded-lg border border-[hsl(var(--border))] px-3 py-1.5 text-xs text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--card))]"
           >
             문의
           </Link>
           <Link
-            href="/admin/therapy-analytics"
-            className="rounded-lg border border-white/10 px-3 py-1.5 text-xs text-white/70 hover:bg-white/10"
+            href="/admin/login"
+            className="rounded-lg border border-[hsl(var(--border))] px-3 py-1.5 text-xs text-[hsl(var(--muted-foreground))] hover:bg-[hsl(var(--card))]"
           >
             Admin
           </Link>

@@ -94,7 +94,7 @@ export default function TherapyLoopSection() {
       </div>
 
 
-      <div className="relative z-10 mx-auto max-w-6xl px-6 py-20 sm:py-28">
+      <div className="relative z-10 mx-auto w-full px-6 py-20 sm:py-28">
         <FadeIn delay={0.02}>
           <div className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-white/80 backdrop-blur">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
@@ -103,19 +103,18 @@ export default function TherapyLoopSection() {
         </FadeIn>
 
         <FadeIn delay={0.08}>
-          <h2 className="mt-6 text-balance text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-            기술을 “설명”하기보다, <span className="text-white/80">“이해”되게</span>
+          <h2 className="mt-12 max-w-5xl text-balance text-4xl font-semibold tracking-tight leading-[1.4] text-white sm:text-6xl">
+            기술을 "설명"하기보다, <span className="text-white/80">"이해"되게</span>
           </h2>
         </FadeIn>
 
         <FadeIn delay={0.14}>
-          <p className="mt-4 max-w-2xl text-pretty text-base leading-relaxed text-white/70">
-            데이터 수집 → AI 분석 → 치료 피드백이 하나의 루프로 연결됩니다.
-            스크롤하면 단계별 핵심이 강조됩니다.
+          <p className="mt-12 w-full text-pretty text-base leading-[2] text-white/70 sm:text-lg">
+            데이터 수집 → AI 분석 → 치료 피드백이 하나의 루프로 연결됩니다. 스크롤하면 단계별 핵심이 강조됩니다.
           </p>
         </FadeIn>
 
-        <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_420px] lg:items-start">
+        <div className="mt-20 grid gap-10 lg:grid-cols-[1fr_360px] lg:items-start">
           {/* LEFT: timeline */}
           <div className="relative">
             <div className="absolute left-4 top-2 bottom-2 w-px bg-white/10" />
@@ -142,8 +141,8 @@ export default function TherapyLoopSection() {
             </div>
           </div>
 
-          {/* RIGHT: sticky preview */}
-          <div className="lg:sticky lg:top-24">
+          {/* RIGHT: preview */}
+          <div className="lg:sticky lg:top-0">
             <PreviewCard active={active} />
           </div>
         </div>

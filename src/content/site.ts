@@ -1,5 +1,5 @@
 export const site = {
-  name: "NEXTDOOR.AI", // 회사명으로 교체
+  name: "NextDoor Inc.", // 회사명으로 교체
   description:
     "아이의 움직임을 이해하는 AI. 소아사경 디지털 치료기기를 만듭니다.",
 
